@@ -24,9 +24,14 @@ public class UpdateStudentServlet extends HttpServlet {
         List<Lesson> lessons = lessonService.getAllLessons();
         int id = Integer.parseInt(req.getParameter("id"));
         Student student = studentService.getStudentById(id);
-        req.setAttribute("lessons", lessons);
-        req.setAttribute("student", student);
-        req.getRequestDispatcher("updateStudent.jsp").forward(req, resp);
+        if (student != null) {
+            req.setAttribute("lessons", lessons);
+            req.setAttribute("student", student);
+            req.getRequestDispatcher("updateStudent.jsp").forward(req, resp);
+        }else {
+            throw new ServletException("Student not found");
+        }
+
     }
 
     @Override

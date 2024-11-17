@@ -1,5 +1,6 @@
 package com.vector.studentlessonservlet.servlet;
 
+import com.vector.studentlessonservlet.model.Lesson;
 import com.vector.studentlessonservlet.service.LessonService;
 
 import javax.servlet.ServletException;
@@ -17,7 +18,14 @@ public class DeleteLessonServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
        int id = Integer.parseInt(req.getParameter("id"));
-       lessonService.deleteLesson(id);
-       resp.sendRedirect("/lesson");
+        Lesson lessonById = lessonService.getLessonById(id);
+        if (lessonById != null) {
+            lessonService.deleteLesson(id);
+            resp.sendRedirect("/lesson");
+        }else {
+            throw new ServletException("Lesson not found");
+        }
+
+
     }
 }

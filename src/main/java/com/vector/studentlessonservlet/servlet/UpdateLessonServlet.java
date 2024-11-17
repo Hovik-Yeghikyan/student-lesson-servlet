@@ -19,8 +19,13 @@ public class UpdateLessonServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         int id = Integer.parseInt(req.getParameter("id"));
         Lesson lesson = lessonService.getLessonById(id);
-        req.setAttribute("lesson", lesson);
-        req.getRequestDispatcher("updateLesson.jsp").forward(req, resp);
+        if (lesson != null) {
+            req.setAttribute("lesson", lesson);
+            req.getRequestDispatcher("updateLesson.jsp").forward(req, resp);
+        }else {
+            throw new ServletException("Lesson not found");
+        }
+
     }
 
     @Override
