@@ -1,6 +1,7 @@
 package com.vector.studentlessonservlet.servlet;
 
 import com.vector.studentlessonservlet.model.Lesson;
+import com.vector.studentlessonservlet.model.User;
 import com.vector.studentlessonservlet.service.LessonService;
 
 import javax.servlet.ServletException;
@@ -16,24 +17,31 @@ public class AddLessonServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getRequestDispatcher("/addLesson.jsp").forward(req, resp);
+        req.getRequestDispatcher("/WEB-INF/addLesson.jsp").forward(req, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        User user = (User) req.getSession().getAttribute("user");
         String name = req.getParameter("name");
         int duration = Integer.parseInt(req.getParameter("duration"));
         double price = Double.parseDouble(req.getParameter("price"));
         String lecturerName = req.getParameter("lecturerName");
+        Lesson lessonByNameAndUserId = lessonService.getLessonByNameAndUserId(name, user.getId());
+        if (lessonByNameAndUserId == null) {
+            Lesson lesson = Lesson.builder()
+                    .name(name)
+                    .duration(duration)
+                    .price(price)
+                    .lecturerName(lecturerName)
+                    .user(user)
+                    .build();
 
-        Lesson lesson = Lesson.builder()
-                .name(name)
-                .duration(duration)
-                .price(price)
-                .lecturerName(lecturerName)
-                .build();
-
-        lessonService.add(lesson);
-        resp.sendRedirect("/lesson");
+            lessonService.add(lesson);
+            resp.sendRedirect("/lesson");
+        }else {
+            req.getSession().setAttribute("msg","Lesson is exists for you");
+            resp.sendRedirect("/addLesson");
+        }
     }
 }

@@ -1,6 +1,8 @@
 package com.vector.studentlessonservlet.servlet;
 
 import com.vector.studentlessonservlet.model.Student;
+import com.vector.studentlessonservlet.model.User;
+import com.vector.studentlessonservlet.model.UserType;
 import com.vector.studentlessonservlet.service.StudentService;
 
 import javax.servlet.ServletException;
@@ -18,8 +20,14 @@ public class StudentServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        List<Student> students = studentService.getAllStudents();
+        User user = (User) req.getSession().getAttribute("user");
+        List<Student> students;
+        if (user.getUserType() == UserType.USER) {
+            students = studentService.getStudentsByUserId(user.getId());
+        } else {
+            students = studentService.getAllStudents();
+        }
         req.setAttribute("students", students);
-        req.getRequestDispatcher("/student.jsp").forward(req, resp);
+        req.getRequestDispatcher("/WEB-INF/student.jsp").forward(req, resp);
     }
 }

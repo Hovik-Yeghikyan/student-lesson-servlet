@@ -11,8 +11,17 @@
     <title>Add Lesson</title>
 </head>
 <body>
+<span>
+    <%
+        if (session.getAttribute("msg") != null) {%>
+    <h3 style="color: red"> <%=session.getAttribute("msg")%></h3>
+    <%
+            session.removeAttribute("msg");
+        }
+    %>
+</span>
 <h1>Add lesson</h1>
-<a href="/lesson">Lesson</a> | <a href="index.jsp">Main</a>
+<a href="/lesson">Lesson</a> | <a href="/">Main</a>
 <form action="/addLesson" method="post">
   Name: <input type="text" name="name"> <br>
   Duration: <input type="number" name="duration"> <br>

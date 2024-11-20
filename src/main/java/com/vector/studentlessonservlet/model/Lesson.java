@@ -16,4 +16,5 @@ public class Lesson {
     private int duration;
     private double price;
     private String lecturerName;
+    private User user;
 }

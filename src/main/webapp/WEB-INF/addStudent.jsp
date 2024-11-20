@@ -13,10 +13,18 @@
 </head>
 <body>
 <%
+    if (session.getAttribute("msg") != null) {%>
+<h3 style="color: red"><%=session.getAttribute("msg")%>
+</h3>
+<%
+        session.removeAttribute("msg");
+    }
+%>
+<%
     List<Lesson> lessons = (List<Lesson>) request.getAttribute("lessons");
 %>
 <h1>Add Student</h1>
-<a href="/student">Student Page</a> | <a href="index.jsp">Main</a>
+<a href="/student">Student Page</a> | <a href="/">Main</a>
 <form action="/addStudent" method="post">
     Name: <input type="text" name="name"> <br>
     Surname: <input type="text" name="surname"> <br>
